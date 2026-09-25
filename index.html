@@ -41,7 +41,10 @@
         }
       }
     }
+
+    
   </script>
+  
 
   <!-- Font Awesome Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -1600,6 +1603,26 @@
         goToPrevChapter();
       }
     }
+    // Automatically load 'book.pdf' on startup without checking local storage libraries
+async function autoLoadDefaultBook() {
+    try {
+        const response = await fetch('book.pdf');
+        if (!response.ok) throw new Error('book.pdf not found in root directory');
+        
+        const arrayBuffer = await response.arrayBuffer();
+        
+        // Call your PDF.js reader loading function here
+        await loadBookFromArrayBuffer(arrayBuffer, 'book.pdf');
+        
+        console.log('Default book.pdf loaded successfully.');
+    } catch (error) {
+        console.error('Auto-load failed:', error);
+    }
+}
+
+// Run immediately when the page finishes loading
+
+});
   </script>
 </body>
 </html>
