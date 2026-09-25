@@ -8,39 +8,31 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            noir: {
-              950: '#07090e',
-              900: '#0c0f17',
-              850: '#121622',
-              800: '#181e2e',
-              700: '#232a3f'
-            },
-            gold: {
-              300: '#f6e7b0',
-              400: '#eac55f',
-              500: '#d4af37',
-              600: '#ab8b28'
-            },
-            aura: {
-              cyan: '#38bdf8',
-              rose: '#fb7185',
-              violet: '#a855f7'
-            }
-          },
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            serif: ['"Playfair Display"', 'Georgia', 'serif'],
-            display: ['"Cinzel"', 'serif'],
-            mono: ['"JetBrains Mono"', 'monospace']
-          }
+    // Automatically load 'book.pdf' on startup without an existing library
+async function initializeDefaultBook() {
+    try {
+        // Fetch the default book from the server/repository root
+        const response = await fetch('book.pdf');
+        if (!response.ok) {
+            throw new Error(`Failed to fetch book.pdf (Status: ${response.status})`);
         }
-      }
+        
+        const arrayBuffer = await response.arrayBuffer();
+        
+        // Pass the raw PDF buffer directly into your PDF.js reader/parser function
+        await loadBookFromArrayBuffer(arrayBuffer, 'book.pdf');
+        
+        console.log('Default book.pdf loaded successfully.');
+    } catch (error) {
+        console.error('Error auto-loading book.pdf:', error);
+        showNotification('Could not load default book.pdf. Please check if the file is in the root directory.');
     }
+}
+
+// Trigger initialization when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeDefaultBook();
+});
   </script>
 
   <!-- Font Awesome Icons CDN -->
